@@ -106,13 +106,13 @@ def calculate_food(idx):
             for _ in range(((len(snake_tail) // 10)) + 1):
                 while True:
                     new = {'row' : randint(1, board_width - 2), 'col' :randint(1, board_height -2)}
-                    if new not in snake_tail and new != snake_head:
+                    if new not in snake_tail and new != snake_head and new not in obstacles:
                         food_location.append(new)
                         break
             return
     while True:
         new = {'row' : randint(1, board_width - 2), 'col' :randint(1, board_height -2)}
-        if new not in snake_tail and new != snake_head:
+        if new not in snake_tail and new != snake_head and new not in obstacles:
             food_location.append(new)
             break
 
@@ -121,7 +121,7 @@ def calculate_obstacles():
     if len(snake_tail) >= 20 and len(snake_tail) % 2 == 0:
         while True:
             new = {'row' : randint(1, board_width - 2), 'col' :randint(1, board_height -2)}
-            if new not in snake_tail and new != snake_head:
+            if new not in snake_tail and new != snake_head and new not in food_location:
                 obstacles.append(new)
                 break
 
