@@ -58,7 +58,7 @@ def draw_board():
             
 
 def game():
-    if game:
+    while game:
         movement()
         draw_board()
         if snake_head in food_location:
@@ -73,7 +73,6 @@ def game():
         if direction in ['w', 'a', 's', 'd']:
             if direction != INCORRECT_TURN[globals()['current_direction']]:
                 globals()['current_direction'] = direction
-        game()
 
 
 def movement():
