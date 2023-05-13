@@ -58,6 +58,7 @@ def draw_board():
             
 
 def game():
+    max_speed = False
     while game:
         movement()
         draw_board()
@@ -67,8 +68,12 @@ def game():
             calculate_obstacles()
         elif detect_collision():
             end_game()
-        delay = float(0.5 - len(snake_tail) / 100)
-        if delay < 0.20 : delay = 0.20
+        if not max_speed:
+            delay = float(0.5 - len(snake_tail) / 100)
+            if delay < 0.25:
+                max_speed = True   
+        else:
+            delay = 0.25
         direction, timed_out = timedKey('', timeout=delay)
         if direction in ['w', 'a', 's', 'd']:
             if direction != INCORRECT_TURN[globals()['current_direction']]:
@@ -99,20 +104,21 @@ def movement():
 
 def calculate_food(idx):
     food_location.pop(idx)
-    if len(snake_tail) != 0: 
-        if len(snake_tail) % 5 == 0:
-            enlarge_board()
-        if len(snake_tail) % 10 == 0:
-            for _ in range(((len(snake_tail) // 10)) + 1):
-                while True:
-                    new = {'row' : randint(1, board_width - 2), 'col' :randint(1, board_height -2)}
-                    if new not in snake_tail and new != snake_head and new not in obstacles:
-                        food_location.append(new)
-                        break
-            return
+    length = len(snake_tail)
+    
+    if length % 5 == 0:
+        enlarge_board()
+    if length % 10 == 0 and length < 30:
+        for _ in range(((len(snake_tail) // 10)) + 1):
+            while True:
+                new = {'row' : randint(1, board_width - 2), 'col' :randint(1, board_height -2)}
+                if new not in snake_tail and new != snake_head and new not in obstacles and new not in food_location:
+                    food_location.append(new)
+                    break
+        return
     while True:
         new = {'row' : randint(1, board_width - 2), 'col' :randint(1, board_height -2)}
-        if new not in snake_tail and new != snake_head and new not in obstacles:
+        if new not in snake_tail and new != snake_head and new not in obstacles and new not in food_location:
             food_location.append(new)
             break
 
@@ -121,7 +127,7 @@ def calculate_obstacles():
     if len(snake_tail) >= 20 and len(snake_tail) % 2 == 0:
         while True:
             new = {'row' : randint(1, board_width - 2), 'col' :randint(1, board_height -2)}
-            if new not in snake_tail and new != snake_head and new not in food_location:
+            if new not in snake_tail and new != snake_head and new not in food_location and new not in obstacles:
                 obstacles.append(new)
                 break
 
