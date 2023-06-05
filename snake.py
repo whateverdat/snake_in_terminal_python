@@ -43,10 +43,7 @@ def draw_board():
                 print('O', end='')
             elif col == 0: # Borders
                 if row == board_width -1: 
-                    if col == 0:
-                        print(f'#    Score: {len(snake_tail)}')
-                    else:
-                        print('#')
+                    print(f'#    Score: {len(snake_tail)}')
                 else:
                     print('#', end='')
             elif row == board_width -1:
